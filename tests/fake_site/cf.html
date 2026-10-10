@@ -1,0 +1,14 @@
+<html><head><meta charset="utf-8"><title>Un instant...</title></head><body><main id="m"></main>
+<script>
+// Indeed + Cloudflare: the first load of this tab is a verification page; once "solved" (reload), the offer
+const n = +(sessionStorage.getItem('cf') || 0);
+sessionStorage.setItem('cf', n + 1);
+if (n === 0) {
+  document.getElementById('m').innerHTML = '<h1>Vérification supplémentaire requise</h1>' +
+    '<p>Voici votre Ray ID pour cette requête : a4883a85afc4e0ad</p><button>Revenir à l\'accueil</button>';
+} else {
+  document.title = 'ML Engineer | Fake Indeed';
+  document.getElementById('m').innerHTML = '<h1>ML Engineer</h1><div id="jobDescriptionText"><p>Zeta recrute un ML ' +
+    'Engineer (CDI, Paris). Missions : RAG, agents LLM, Python, mise en production, évaluation des modèles.</p></div>';
+}
+</script></main></body></html>

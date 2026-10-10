@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Offres d'emploi AI engineer - HelloWork (fake)</title></head><body>
+<form action="/search.html"><input name="k" aria-label="Quoi ?" value="AI engineer"><button>Rechercher</button></form>
+<ul id="r"></ul>
+<script>
+ const jobs = [["61000001", "AI Engineer H/F", "ACME", "Paris - 75"], ["61000002", "GenAI Engineer H/F", "Delta", "Lyon - 69"],
+               ["61000003", "LLM Engineer H/F", "Gamma", "Lille - 59"]];
+ setTimeout(() => { document.getElementById('r').innerHTML = jobs.map(([id, t, c, l]) =>
+   `<li data-id-storage-target="item"><a href="/fr-fr/emplois/${id}.html?utm=serp" aria-label="${t}">
+      <h3><p>${t}</p><p>${c}</p></h3></a><div>${l}</div><div>CDI</div></li>`).join(''); }, 500);
+</script></body></html>

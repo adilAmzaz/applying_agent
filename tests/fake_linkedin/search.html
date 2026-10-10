@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><title>AI engineer | Emplois | LinkedIn (fake)</title>
+<style>
+ #list { height: 300px; overflow-y: auto; width: 500px; border: 1px solid #ccc }
+ li { height: 140px; list-style: none; border-bottom: 1px solid #eee }
+ .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0) }
+</style></head><body>
+<input aria-label="Rechercher" value="AI engineer"><input aria-label="Lieu" value="France">
+<div id="list"><ul>
+ <li data-occludable-job-id="3900000001"><div class="job-card-container" data-job-id="3900000001">
+   <a class="job-card-container__link" href="/jobs/view/3900000001/" aria-label="AI Engineer with verification">
+     <strong><span aria-hidden="true">AI Engineer</span></strong><span class="visually-hidden">AI Engineer with verification</span></a>
+   <div class="artdeco-entity-lockup__subtitle">ACME</div>
+   <ul class="job-card-container__metadata-wrapper"><li>Paris, Île-de-France (Hybride)</li></ul>
+   <div class="job-card-container__footer-item">Candidature simplifiée</div></div></li>
+ <li data-occludable-job-id="3900000002"><div class="job-card-container" data-job-id="3900000002">
+   <a class="job-card-container__link" href="/jobs/view/3900000002/"><strong>GenAI Engineer</strong></a>
+   <div class="artdeco-entity-lockup__subtitle">Delta</div>
+   <ul class="job-card-container__metadata-wrapper"><li>Lyon</li></ul></div></li>
+ <li data-occludable-job-id="3900000003"><div class="job-card-container" data-job-id="3900000003">
+   <a class="job-card-container__link" href="/jobs/view/3900000003/"><strong>LLM Engineer</strong></a>
+   <div class="artdeco-entity-lockup__subtitle">Gamma</div>
+   <div class="job-card-container__footer-job-state">Candidature envoyée</div></div></li>
+ <li data-occludable-job-id="3900000004"><div class="job-card-container" data-job-id="3900000004">
+   <a class="job-card-container__link" href="/jobs/view/3900000004/"><strong>Data Scientist IA</strong></a>
+   <div class="artdeco-entity-lockup__subtitle">Zeta</div></div></li>
+ <li data-occludable-job-id="3900000005" id="late"></li>
+</ul></div>
+<script>
+ // like LinkedIn: the last card is only rendered once the list is scrolled
+ document.getElementById('list').addEventListener('scroll', e => {
+   const late = document.getElementById('late');
+   if (e.target.scrollTop > 150 && !late.innerHTML)
+     late.innerHTML = '<div class="job-card-container" data-job-id="3900000005"><a class="job-card-container__link" ' +
+       'href="/jobs/view/3900000005/"><strong>ML Engineer</strong></a><div class="artdeco-entity-lockup__subtitle">Epsilon</div></div>';
+ });
+</script></body></html>

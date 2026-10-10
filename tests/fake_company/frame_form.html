@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body>
+<form onsubmit="event.preventDefault(); document.body.innerHTML = '<h2>Candidature envoyée</h2>'">
+  <label for="n">Nom complet</label><input id="n" required>
+  <label for="e">Email</label><input id="e" type="email" required>
+  <label for="cv">CV (PDF)</label><input id="cv" type="file" required>
+  <label for="m">Message au recruteur</label><textarea id="m"></textarea>
+  <input type="checkbox" id="p"><label for="p">J'accepte la politique de confidentialité</label>
+  <input type="checkbox" id="a" checked><label for="a">Recevoir des alertes emploi</label>
+  <button type="submit">Envoyer ma candidature</button>
+</form></body></html>

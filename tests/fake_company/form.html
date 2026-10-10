@@ -1,0 +1,9 @@
+<html><head><meta charset="utf-8"><title>Delta Careers - Postuler</title></head><body><main>
+<h1>Candidature : GenAI Engineer</h1>
+<p>Déjà candidat ? <button>Créer un compte</button></p>
+<label for="n">Nom complet</label><input id="n" required>
+<label for="m">Email</label><input id="m" type="email" required>
+<label for="cv">CV (PDF)</label><input id="cv" type="file" required>
+<label><input type="checkbox" id="c" required> J'accepte la politique de confidentialité</label>
+<button onclick="if(document.getElementById('c').checked){document.title='Candidature envoyée';document.querySelector('main').innerHTML='<h1>Candidature envoyée</h1>'}">Envoyer ma candidature</button>
+</main></body></html>

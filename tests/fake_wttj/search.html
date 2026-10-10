@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Offres d'emploi AI engineer | Welcome to the Jungle (fake)</title></head><body>
+<header><a href="/fr/me">Mon espace</a></header><ol id="results"></ol>
+<script>
+ // like WTTJ (React + Algolia): the list is drawn after the page has loaded
+ // shown by relevance, not date (like the real matches page)
+ const jobs = [["acme", "ai-engineer_paris", "AI Engineer", "ACME", "Paris", "1 octobre 2026"],
+               ["delta", "genai-engineer_lyon", "GenAI Engineer", "Delta", "Lyon", "Aujourd'hui"],
+               ["gamma", "llm-engineer_paris", "LLM Engineer", "Gamma", "Télétravail total", "5 octobre 2026"]];
+ setTimeout(() => {
+   document.getElementById('results').innerHTML = jobs.map(([c, j, t, n, l, d]) =>
+     `<li data-testid="search-results-list-item-wrapper"><img alt="${n}" src="data:,"><a href="/fr/companies/${c}/jobs/${j}?q=abc&o=1">
+        <h4>${t}</h4></a><span>${n}</span><p>${l}</p><p>CDI</p><p>${d}</p></li>`).join('');
+ }, 700);
+</script></body></html>

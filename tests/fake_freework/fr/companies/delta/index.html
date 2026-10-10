@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Delta | Free-Work</title></head><body>
+<main><h1>DELTA</h1><p>Lyon, Auvergne-Rhône-Alpes</p>
+<div id="spont"></div>
+<section><h2>2 Développeurs Fullstack Senior .NET</h2><p>Publiée le 07/10/2026</p><button>Je postule</button></section></main>
+<div id="toasts"></div>
+<script>
+ if (location.search.includes('sent=1')) {
+   setTimeout(() => {          // the toast comes a little after the page, then goes away
+     const t = document.createElement('div'); t.className = 'toast-success';
+     t.innerHTML = '<strong>Envoyé</strong><p>Votre candidature a été envoyée avec succès</p>';
+     document.getElementById('toasts').appendChild(t);
+     document.getElementById('spont').innerText = 'Candidature spontanée déjà envoyée le 10/10/2026';
+     setTimeout(() => t.remove(), 2500);
+   }, 600);
+ }
+</script></body></html>

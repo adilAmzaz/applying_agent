@@ -1,0 +1,125 @@
+# Copy to config.toml (cp config.example.toml config.toml) and edit.
+# All settings in one place. Edit and re-run, no code change needed.
+# Environment variables still win for quick tests: MODEL=..., OLLAMA_API_BASE=..., BROWSER=chromium
+
+[llm]
+model = "openai/gpt-6-luna"        # apply agent (tool calling). "gemini/gemini-3.8-flash", "anthropic/claude-haiku-4-5", "ollama_chat/..."
+judge_model = ""                   # empty = same as model. The judge is 1 call per NEW offer
+fallback_model_1 = "anthropic/claude-haiku-4-5"   # used when the model keeps failing (2 tries each), then...
+fallback_model_2 = "gemini/gemini-3.8-flash"      # ...this one. "" = none. A model without its key in .env is skipped
+# API KEYS: all in .env (never here): OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, MISTRAL_API_KEY...
+#           the provider is the start of the model name: "openai/..." -> OPENAI_API_KEY
+min_seconds_between_calls = 0      # 6 for Gemini free tier
+
+[search]
+sources = ["indeed", "linkedin", "wttj", "hellowork", "freework",
+           "indeed_email", "linkedin_email", "wttj_email", "hellowork_email", "freework_email"]
+                                   # browser: "indeed", "linkedin", "wttj", "hellowork" (each query on each site, agent Chrome)
+                                   # email  : "..._email" (your job-alert emails, [email])
+                                   # remove one to disable it. Same offer seen by 2 sources = handled once
+queries = ["AI engineer", "ingénieur IA", "LLM engineer", "machine learning engineer", "développeur IA"]   # one search per query, same location. Same offer found by 2 queries
+                                   # = same Indeed id: opened and judged ONCE (no extra tokens)
+location = "France"
+easy_apply_only = false            # false: external (company site) offers are judged too
+max_pages = 3                      # Indeed pages per query: 5 queries x 3 pages = up to 15 pages ([linkedin] has its own)
+extra_search_urls = []             # any results URL pasted from the site (several searches per scan)
+
+[agents]                           # one agent per site, each with ITS OWN Chrome (own profile = own logins, own port)
+                                   # python scan.py = all of them at the same time; python scan.py linkedin = one
+                                   # Chromes: start_all_chromes.bat (ports must match start_chrome.bat)
+                                   # an agent runs only its sources that are ALSO in [search] sources
+indeed    = { port = 9222, profile = "",          sources = ["indeed", "indeed_email"] }
+linkedin  = { port = 9223, profile = "linkedin",  sources = ["linkedin", "linkedin_email"] }
+wttj      = { port = 9224, profile = "wttj",      sources = ["wttj", "wttj_email"] }
+hellowork = { port = 9225, profile = "hellowork", sources = ["hellowork", "hellowork_email"] }
+freework  = { port = 9226, profile = "freework",  sources = ["freework", "freework_email"] }
+
+[indeed]
+pause_seconds = 1.5                # wait after each Indeed page
+
+[linkedin]                         # browser search on YOUR logged-in LinkedIn: keep it slow, watch the first runs
+max_pages = 1                      # results pages per query (25 offers each). Raise slowly (2-3)
+pause_seconds = 10                  # wait after each LinkedIn page (results and offers)
+date_posted = "week"               # any | day | week | month
+easy_apply_only = false            # true: only "Candidature simplifiée"
+location = ""                      # empty = [search] location
+
+[wttj]                             # Welcome to the Jungle: YOUR MATCHES (logged in), 10 per page, best match first
+max_pages = 30                     # pages of matches read per scan (offers already known are skipped for free)
+pause_seconds = 2
+published_since = "last_7d"        # "last_3d", "last_7d", or "" = all dates (1600+ matches!)
+
+[hellowork]                        # HelloWork (public search pages)
+max_pages = 2                      # results pages per query
+pause_seconds = 2
+location = ""                      # empty = [search] location ("France" = whole country)
+
+[freework]                         # Free-Work (IT jobs AND freelance missions, public search pages)
+max_pages = 5                      # results pages per query (newest first: stops early on a page already known)
+pause_seconds = 2
+sort = "date"                      # "date" = newest offers first, "relevance" = the site's order
+contracts = []                     # [] = all. Or ["permanent"] (CDI), ["contractor"] (freelance), both...
+locations = ""                     # "" = everywhere. e.g. "fr~~~" (France), "fr~ile-de-france~~" (Île-de-France)
+
+[email]                            # mailbox read by the email sources: READ-ONLY (nothing marked read or deleted)
+imap_host = "imap.gmail.com"
+address = ""    # the mailbox where your job alerts arrive
+password_env = "JOBAGENT_MAIL_PASSWORD"   # Gmail APP password in this environment variable (never in this file)
+folder = "INBOX"
+since_days = 7                     # emails older than this are ignored; each email is parsed once (table mail_seen)
+forwarded_from = []   # emails from these addresses are opened too: alerts forwarded
+                                   # by hand (as .eml attachments or quoted) are read from inside them
+
+[prefilter]                        # FREE filter before the LLM judge (saves tokens). Empty = everything goes to the judge
+any_of = []                        # at least one must appear
+mandatory = []                     # all must appear ("a|b" = a or b)
+excluded = ["stage"] # none may appear
+
+[judge]
+profile_file = "judge/profile.md"    # what you are looking for (big prompt, written by you)
+examples_file = "judge/examples.md"  # offers you labelled high / maybe / low (python jobs.py example <id> high)
+max_offer_chars = 16000               # offer text sent to the judge (cost control)
+
+[apply]
+max_steps = 60                     # actions per application (long LinkedIn / Workday forms need more)
+external_sites = true              # follow "Continuer pour postuler" to company sites
+cv_path = "cv/my_cv.pdf"         # your CV: relative to the project folder, or an absolute /mnt/c/... path
+vision = true                      # the agent may take a screenshot (look) when a page is unclear (a few cents)
+autopilot = true                   # known steps (contact, CV, known questions, Suivant/Vérifier) WITHOUT the AI:
+                                   # faster, cheaper. New questions go to the AI, their answers are learned in
+                                   # profile.json "form_answers" (edit / delete there). false = the AI does every step
+
+[avoid]                            # NEVER apply here (the offer is still judged and saved, status "avoided")
+sites = ["3ds.com"]                # a site and its sub-domains: "3ds.com" = www.3ds.com, careers.3ds.com...
+                                   # checked on the offer, on its "apply on the company site" link, and on every page
+                                   # the application goes to (a job board sending you there stops it at once)
+companies = []                     # company names, accents / case ignored, e.g. ["Dassault Systèmes"]
+
+[auto_apply]                       # used by scan.py when you are away. Start with enabled = false.
+enabled = true
+verdicts = ["high"]                # levels applied to: ["high"] or ["high", "maybe"] (maybe: the recruiter sees your CV for other roles)
+min_score = { high = 70, maybe = 40 }   # minimum judge score per level (or one number for all)
+submit = true                     # false: fill until the review page and stop (you click "send" later)
+                                   # true : the agent clicks the final button itself (job boards' terms may forbid it)
+approve_legal = true              # true: tick privacy/consent checkboxes without asking
+max_per_run = 3
+supervised = true                 # true: you are watching -> captchas / logins / unknown questions asked in the terminal
+                                   # quicker: python scan.py linkedin --apply high,maybe --supervised
+
+[notify]
+reports_dir = "reports"            # one Markdown report per scan (Telegram/email later: nodes/notify.py)
+
+[accounts]                         # default account on RECRUITMENT sites (Workday, SmartRecruiters, company portals)
+enabled = true                     # never on Google / LinkedIn / Microsoft / Indeed..., never "Continuer avec Google"
+email = ""                         # empty = profile.json identity.email
+password_env = "JOBAGENT_ACCOUNT_PASSWORD"   # the password lives in .env ONLY (never in this file); typed by fill_password,
+                                   # never shown to the AI, never logged. Sites used: accounts.json
+
+[telegram]                         # messages to your phone (setup: python telegram_setup.py)
+enabled = true                     # needs TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in .env
+notify = ["human", "needs_human", "report", "errors"]
+                                   # human: the agent needs you now (captcha, login, a question) -> answer from the phone
+                                   # needs_human: an application ended needs_human / stuck
+                                   # report: summary at the end of each scan    errors: an application / agent crashed
+token_env = "TELEGRAM_BOT_TOKEN"
+chat_env = "TELEGRAM_CHAT_ID"

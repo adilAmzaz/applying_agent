@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Offres de mission freelance et d'emploi informatique | Free-Work (fake)</title></head><body>
+<fw-marquee><a href="/fr/tech-it/job-mission/erp/sap-consultant">SAP CONSULTANT</a> Il y a une minute</fw-marquee>
+<div id="r"></div>
+<script>
+ var jobs = [["ai-engineer-h-f", "AI Engineer H/F", "ACME", "Paris, Île-de-France", "CDI"],
+             ["genai-engineer-freelance", "GenAI Engineer", "Delta", "Lyon, Auvergne-Rhône-Alpes", "Freelance"],
+             ["llm-engineer-h-f", "LLM Engineer H/F", "Gamma", "Lille, Hauts-de-France", "CDI"]];
+ setTimeout(() => { document.getElementById('r').innerHTML = jobs.map(([s, t, c, l, k]) =>
+   `<div class="rounded-lg"><div class="p-4"><span>${k}</span><a href="/fr/tech-it/job-mission/ia/${s}"><h2>${t}</h2></a>
+      <span>Python</span><span>LLM</span><div>10/10/2026</div><div>${c}</div><p>Description ${t} chez ${c}, agents LLM et RAG en Python.</p>
+      <a href="/fr/tech-it/job-mission/ia/${s}">Voir cette offre</a></div>
+      <div><div>LIEU</div><div>${l}</div></div></div>`).join(''); }, 400);
+</script></body></html>
