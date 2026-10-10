@@ -328,3 +328,4 @@ the offer page, "site du recruteur", expired offer, tracking-link email), 4 agen
 one database, lock), unknown company site (cookie banner, hidden apply link, security check
 with you watching / without you, form inside a frame, screenshot), apply levels high + maybe, alert emails
 (real Indeed / LinkedIn formats, parsed once, browser + email in one scan, no password).
+# applying_agent
